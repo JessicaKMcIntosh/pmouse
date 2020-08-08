@@ -34,7 +34,7 @@
 /*                assumed.                                                   */
 /*                                                                           */
 ******************************************************************************)
-program MouseInterpreter;
+program PMOUSE;
 
 const
   maxproglen    = 2000;     { Maximum length of Mouse program }
