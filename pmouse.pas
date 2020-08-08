@@ -37,78 +37,74 @@
 program PMOUSE;
 
 const
-  maxproglen    = 2000;     { Maximum length of Mouse program }
-  stacksize     = 1024;     { Maximum depth of calculation stack }
-  envstacksize  = 1024;     { Maximum depth of environment stack }
-  locsize       = 26;       { Size of local variable space }
-  maxaddr       = 1300;     { 50 local variable spaces }
-  halfwidth     = 39;       { A number < half screen width }
-  maxbyte       = 255;      { Small positive integers }
-  filelength    = 255;      { Maximum length of a file name. }
-  mouseext      = '.mou';   { Mouse program extension. }
+  MaxProgLen    = 2000;     { Maximum length of Mouse program }
+  StackSize     = 1024;     { Maximum depth of calculation stack }
+  EnvStackSize  = 1024;     { Maximum depth of environment stack }
+  LocalVarSize  = 26;       { Size of local variable space }
+  MaxAddress    = 1300;     { 50 local variable spaces }
+  HalfWidth     = 39;       { A number < half screen width }
+  MaxByte       = 255;      { Small positive integers }
+  FileLength    = 255;      { Maximum length of a file name. }
+  MouseExt      = '.mou';   { Mouse program extension. }
 
 type
-  byte      = 0 .. maxbyte;
-  progindex = 0 .. maxproglen;
-  tagtype   = (macro, parameter, loop);
-  filename  = string[filelength];
+  byte      = 0 .. MaxByte;
+  ProxIndex = 0 .. MaxProgLen;
+  TagType   = (Macro, Parameter, Loop);
+  FileName  = string[FileLength];
 
-  environment = record
-    tag     : tagtype;
-    charpos : 1 .. maxproglen;
-    offset  : 0 .. maxaddr
-  end;  { environment }
+  Environment = record
+    Tag     : TagType;
+    CharPos : 1 .. MaxProgLen;
+    Offset  : 0 .. MaxAddress
+  end;  { Environment }
 
 var
-  progfile: Text;
+  ProgFile: Text;
 
-  prog      : array [1 .. maxproglen] of char;
-  stack     : array [1 .. stacksize] of integer;
-  envstack  : array [1 .. envstacksize] of environment;
-  Data      : array [0 .. maxaddr] of integer;
-  macdefs   : array ['A'..'Z'] of 0 .. maxproglen;
+  Prog      : array [1 .. MaxProgLen] of char;
+  Stack     : array [1 .. StackSize] of integer;
+  EnvStack  : array [1 .. EnvStackSize] of Environment;
+  Data      : array [0 .. MaxAddress] of integer;
+  MacroDefs : array ['A'..'Z'] of 0 .. MaxProgLen;
 
-  ch          : char;             { Character currently being processed. }
-  charpos,                        { Current position in the program. }
-  proglen     : 0 .. maxproglen;  { Length of the program. }
-  sp          : 0 .. stacksize;   { Stack pointer. }
-  esp,                            { Environment stack pointer. }
-  tsp         : 0 .. envstacksize;
-  offset,
-  nextfree,
-  temp,                           { Temporary value during interpretation. }
-  parbal,
-  parnum      : integer;
-  tracing,                        { If true tracing is enabled. }
-  disaster    : boolean;          { If true a critical error has occurred. }
+  CH            : char;             { Character currently being processed. }
+  CharPos,                          { Current position in the program. }
+  ProgLen       : 0 .. MaxProgLen;  { Length of the program. }
+  StackPointer  : 0 .. StackSize;   { Stack pointer. }
+  EStackPointer,                    { Environment stack pointer. }
+  TStackPointer : 0 .. EnvStackSize;{ Temporary stack Pointer. }
+  Offset        : integer;          { Memory offset for environments. }
+  Tracing,                          { If true tracing is enabled. }
+  Disaster      : boolean;          { If true a critical error has occurred. }
 
 { Display an environment; used for reporting errors and tracing. }
-procedure display(charpos: progindex);
+procedure display(CharPos: ProxIndex);
 var
   pos: integer;
 begin
-  for pos := charpos - halfwidth to charpos + halfwidth do
+  for pos := CharPos - HalfWidth to CharPos + HalfWidth do
     { ASCII graphic character }
-    if (pos >= 1) and (pos <= proglen) and (prog[pos] >= ' ') then
-      write(prog[pos])
+    if (pos >= 1) and (pos <= ProgLen) and (Prog[pos] >= ' ') then
+      write(Prog[pos])
     else
       write(' ');
   writeln;
-  writeln(' ': halfwidth, '^');
+  writeln(' ': HalfWidth, '^');
 end;   { display }
 
-{ Report an error and set 'disaster' flag to stop the interpreter. }
+{ Report an error and set 'Disaster' flag to stop the interpreter. }
 procedure error(code: byte);
 var
-  tsp: byte;
+  TStackPointer: byte;
 begin
   writeln;
-  for tsp := 1 to esp do
-    display(envstack[tsp].charpos);
-  display(charpos);
+  for TStackPointer := 1 to EStackPointer do
+    display(EnvStack[TStackPointer].CharPos);
+  display(CharPos);
   write('Stack:');
-  for tsp := 1 to sp do
-    write(' ', stack[tsp]: 1);
+  for TStackPointer := 1 to StackPointer do
+    write(' ', Stack[TStackPointer]: 1);
   writeln;
   write('***** Error: ');
   case code of
@@ -125,16 +121,16 @@ begin
     11: write('Illegal character');
   end; { CASE }
   writeln;
-  disaster := true;
+  Disaster := true;
 end;   { error }
 
 { Get next character from program buffer and check for end of program. }
 procedure getchar;
 begin
-  if charpos < proglen then
+  if CharPos < ProgLen then
   begin
-    charpos := charpos + 1;
-    ch := prog[charpos];
+    CharPos := CharPos + 1;
+    CH := Prog[CharPos];
   end
   else
     error(1);
@@ -143,16 +139,16 @@ end;   { getchar }
 { Backspace the character pointer. }
 procedure backspace;
 begin
-  charpos := charpos - 1;
+  CharPos := CharPos - 1;
 end;   { backspace }
 
 { Push an item onto the calculation stack and check for stack overflow. }
 procedure push(datum: integer);
 begin
-  if sp < stacksize then
+  if StackPointer < StackSize then
   begin
-    sp := sp + 1;
-    stack[sp] := datum;
+    StackPointer := StackPointer + 1;
+    Stack[StackPointer] := datum;
   end
   else
     error(2);
@@ -161,10 +157,10 @@ end;   { push }
 { Pop an item from the calculation stack; check for underflow. }
 function pop: integer;
 begin
-  if sp > 0 then
+  if StackPointer > 0 then
   begin
-    pop := stack[sp];
-    sp := sp - 1;
+    pop := Stack[StackPointer];
+    StackPointer := StackPointer - 1;
   end
   else
     error(3);
@@ -175,7 +171,7 @@ procedure skipstring;
 begin
   repeat
     getchar
-  until ch = '"';
+  until CH = '"';
 end;   { skipstring }
 
 { Skip bracketed sequences; lch has been scanned on entry. }
@@ -186,11 +182,11 @@ begin
   Count := 1;
   repeat
     getchar;
-    if ch = '"' then
+    if CH = '"' then
       skipstring
-    else if ch = lch then
+    else if CH = lch then
       Count := Count + 1
-    else if ch = rch then
+    else if CH = rch then
       Count := Count - 1
   until Count = 0;
 end;   { skip }
@@ -204,19 +200,19 @@ end;   { value }
 { Convert a lower case letter to upper case. }
 procedure uppercase;
 begin
-  if ch in ['a'..'z'] then
-    ch := chr(Ord(ch) - Ord('a') + Ord('A'));
+  if CH in ['a'..'z'] then
+    CH := chr(Ord(CH) - Ord('a') + Ord('A'));
 end;   { uppercase }
 
 { Push an environment; check for environment stack overflow. }
-procedure pushenv(tag: tagtype);
+procedure pushenv(Tag: TagType);
 begin
-  if esp < envstacksize then
+  if EStackPointer < EnvStackSize then
   begin
-    esp := esp + 1;
-    envstack[esp].tag := tag;
-    envstack[esp].charpos := charpos;
-    envstack[esp].offset := offset;
+    EStackPointer := EStackPointer + 1;
+    EnvStack[EStackPointer].Tag := Tag;
+    EnvStack[EStackPointer].CharPos := CharPos;
+    EnvStack[EStackPointer].Offset := Offset;
   end
   else
     error(8);
@@ -225,11 +221,11 @@ end;   { pushenv }
 { Pop an environment; check for environment stack underflow. }
 procedure popenv;
 begin
-  if esp > 0 then
+  if EStackPointer > 0 then
   begin
-    charpos := envstack[esp].charpos;
-    offset := envstack[esp].offset;
-    esp := esp - 1;
+    CharPos := EnvStack[EStackPointer].CharPos;
+    Offset := EnvStack[EStackPointer].Offset;
+    EStackPointer := EStackPointer - 1;
   end
   else
     error(9);
@@ -238,117 +234,123 @@ end;   { popenv }
 { The Loader. }
 procedure load;
 begin
-  for charpos := 1 to maxproglen do
-    prog[charpos] := ' ';
-  charpos := 0;
-  disaster := false;
-  while not (EOF(progfile) or disaster) do
+  for CharPos := 1 to MaxProgLen do
+    Prog[CharPos] := ' ';
+  CharPos := 0;
+  Disaster := false;
+  while not (EOF(ProgFile) or Disaster) do
   begin
-    read(progfile, ch);
-    if ch < ' ' then
-      ch := ' ';
-    if ch = '~' then
-      readln(progfile)
-    else if charpos < maxproglen then
+    read(ProgFile, CH);
+    if CH < ' ' then
+      CH := ' ';
+    if CH = '~' then
+      readln(ProgFile)
+    else if CharPos < MaxProgLen then
     begin
-      charpos := charpos + 1;
-      prog[charpos] := ch;
+      CharPos := CharPos + 1;
+      Prog[CharPos] := CH;
     end
     else
     begin
       writeln('Program is too long');
-      disaster := true;
+      Disaster := true;
     end;
-  end;   { WHILE }
-  proglen := charpos;
+  end;   { while not (EOF(ProgFile) or Disaster) }
+  ProgLen := CharPos;
 end;   { load }
 
 { Construct macro definition table. }
 procedure makedeftable;
 begin
-  for ch := 'A' to 'Z' do
-    macdefs[ch] := 0;
-  charpos := 0;
+  for CH := 'A' to 'Z' do
+    MacroDefs[CH] := 0;
+  CharPos := 0;
   repeat
     getchar;
-    if ch = '$' then
+    if CH = '$' then
     begin
       getchar;
       uppercase;
-      if ch in ['A'..'Z'] then
-        macdefs[ch] := charpos;
+      if CH in ['A'..'Z'] then
+        MacroDefs[CH] := CharPos;
     end
-  until charpos = proglen;
+  until CharPos = ProgLen;
 end;   { makedeftable }
 
 { The Interpreter. }
 procedure interpret;
+var
+  NextFree,               { Next free memory offset. }
+  ParmBal,                { Used for matching parameters. }
+  ParmNum,                { Parameter Number. }
+  TempInt     : integer;  { Temporary value. }
+
 begin
-  charpos := 0;
-  sp := 0;
-  esp := 0;
-  offset := 0;
-  nextfree := locsize;
+  CharPos := 0;
+  StackPointer := 0;
+  EStackPointer := 0;
+  Offset := 0;
+  NextFree := LocalVarSize;
   repeat
     getchar;
-    if tracing and (ch <> ' ') then
-      display(charpos);
-    case ch of
+    if Tracing and (CH <> ' ') then
+      display(CharPos);
+    case CH of
       ' ': ;                    { No action }
       '$': ;                    { No action }
       '0'..'9':                 { Encode a decimal number }
       begin
-        temp := 0;
-        while ch in ['0'..'9'] do
+        TempInt := 0;
+        while CH in ['0'..'9'] do
         begin
-          temp := 10 * temp + Value(ch);
+          TempInt := 10 * TempInt + Value(CH);
           getchar;
-        end;   { WHILE }
-        push(temp);
+        end;   { while CH in ['0'..'9'] }
+        push(TempInt);
         backspace;
       end;
       '+': push(pop + pop);     { Add }
       '-':                      { Subtract }
       begin
-        temp := pop;
-        push(pop - temp);
+        TempInt := pop;
+        push(pop - TempInt);
       end;
       '*': push(pop * pop);     { Multiply }
       '/':                      { Divide with zero check }
       begin
-        temp := pop;
-        if temp <> 0 then
-          push(pop div temp)
+        TempInt := pop;
+        if TempInt <> 0 then
+          push(pop div TempInt)
         else
           error(4);
       end;
       '\':                      { Remainder with zero check }
       begin
-        temp := pop;
-        if temp <> 0 then
-          push(pop mod temp)
+        TempInt := pop;
+        if TempInt <> 0 then
+          push(pop mod TempInt)
         else
           error(5);
       end;
       '?':                      { Read character or }
       begin                     { number from keyboard }
         getchar;
-        if ch = '''' then
+        if CH = '''' then
         begin
-          read(ch);
-          push(Ord(ch));
+          read(CH);
+          push(Ord(CH));
         end
         else
         begin
-          read(temp);
-          push(temp);
+          read(TempInt);
+          push(TempInt);
           backspace;
         end;
       end;
       '!':                      { Display character }
       begin                     { or number on screen }
         getchar;
-        if ch = '''' then
+        if CH = '''' then
           write(chr(pop))
         else
         begin
@@ -358,35 +360,35 @@ begin
       end;
       '"': repeat
           getchar;
-          if ch = '!' then
+          if CH = '!' then
             writeln
-          else if ch <> '"' then
-            write(ch)
-        until ch = '"';
-      'A'..'Z': push(Ord(ch) - Ord('A') + offset);
-      'a'..'z': push(Ord(ch) - Ord('a') + offset);
+          else if CH <> '"' then
+            write(CH)
+        until CH = '"';
+      'A'..'Z': push(Ord(CH) - Ord('A') + Offset);
+      'a'..'z': push(Ord(CH) - Ord('a') + Offset);
       ':':                      { Assignment }
       begin
-        temp := pop;
-        Data[temp] := pop;
+        TempInt := pop;
+        Data[TempInt] := pop;
       end;
       '.': push(Data[pop]);     { Dereference }
       '<':
       begin
-        temp := pop;
-        push(Ord(pop < temp));
+        TempInt := pop;
+        push(Ord(pop < TempInt));
       end;
       '=': push(Ord(pop = pop));
       '>':
       begin
-        temp := pop;
-        push(Ord(pop > temp));
+        TempInt := pop;
+        push(Ord(pop > TempInt));
       end;
       '[': if pop <= 0 then     { Conditional statement }
           skip('[', ']');
       ']': ;                    { No action }
-      '(': pushenv(loop);       { Begin loop }
-      ')': charpos := envstack[esp].charpos; { End loop }
+      '(': pushenv(Loop);       { Begin loop }
+      ')': CharPos := EnvStack[EStackPointer].CharPos; { End loop }
       '^': if pop <= 0 then     { Exit loop }
         begin
           popenv;
@@ -396,15 +398,15 @@ begin
       begin
         getchar;
         uppercase;
-        if ch in ['A'..'Z'] then
-          if macdefs[ch] > 0 then
+        if CH in ['A'..'Z'] then
+          if MacroDefs[CH] > 0 then
           begin
-            pushenv(macro);
-            charpos := macdefs[ch];
-            if nextfree + locsize <= maxaddr then
+            pushenv(Macro);
+            CharPos := MacroDefs[CH];
+            if NextFree + LocalVarSize <= MaxAddress then
             begin
-              offset := nextfree;
-              nextfree := nextfree + locsize;
+              Offset := NextFree;
+              NextFree := NextFree + LocalVarSize;
             end
             else
               error(10);
@@ -418,71 +420,71 @@ begin
       begin
         popenv;
         skip('#', ';');
-        nextfree := nextfree - locsize;
+        NextFree := NextFree - LocalVarSize;
       end;
       '%':                      { Replace formal by actual }
       begin
-        pushenv(parameter);
-        parbal := 1;
-        tsp := esp;
+        pushenv(Parameter);
+        ParmBal := 1;
+        TStackPointer := EStackPointer;
         repeat
-          tsp := tsp - 1;       { Search in stack... }
+          TStackPointer := TStackPointer - 1; { Search in stack... }
 
-          case envstack[tsp].tag of
-            macro: parbal := parbal - 1;
-            parameter: parbal := parbal + 1;
-            loop: end   { CASE }
-        until parbal = 0;       { ...for call environment }
-        charpos := envstack[tsp].charpos;
-        offset := envstack[tsp].offset;
-        parnum := pop;          { Get parameter number }
+          case EnvStack[TStackPointer].Tag of
+            Macro: ParmBal := ParmBal - 1;
+            Parameter: ParmBal := ParmBal + 1;
+            Loop: end   { case EnvStack[TStackPointer].Tag }
+        until ParmBal = 0;      { ...for call environment }
+        CharPos := EnvStack[TStackPointer].CharPos;
+        Offset := EnvStack[TStackPointer].Offset;
+        ParmNum := pop;         { Get parameter number }
         repeat
           getchar;
-          if ch = '"' then
+          if CH = '"' then
             skipstring
-          else if ch = '#' then
+          else if CH = '#' then
             skip('#', ';')
-          else if ch = ',' then
-            parnum := parnum - 1
-          else if ch = ';' then
+          else if CH = ',' then
+            ParmNum := ParmNum - 1
+          else if CH = ';' then
           begin
-            parnum := 0;
+            ParmNum := 0;
             popenv;   { Null parameter }
           end
-        until parnum = 0;
+        until ParmNum = 0;
       end;
       ',',                      { End of actual parameter }
       ';': popenv;              { End of macro call }
       '''':                     { Stack next character }
       begin
         getchar;
-        push(Ord(ch));
+        push(Ord(CH));
       end;
-      '{': tracing := true;
-      '}': tracing := false;
+      '{': Tracing := true;
+      '}': Tracing := false;
       '`',                      { Unused characters }
       '&',
       '|',
       '_': error(11);
       else error(11)
     end;   { CASE }
-  until (ch = '$') or disaster;
+  until (CH = '$') or Disaster;
 end;   { interpret }
 
 { Open the program file. }
 { If the file is not found retries with the mouse file extension. }
-function openfile(mousefile: filename): boolean;
+function openfile(mousefile: FileName): boolean;
 begin
-  assign(progfile, mousefile);
+  assign(ProgFile, mousefile);
   {$I-}
-  reset(progfile);
+  reset(ProgFile);
   {$I+}
   if IOResult <> 0 then
   begin
-    mousefile := mousefile + mouseext;
-    assign(progfile, mousefile);
+    mousefile := mousefile + MouseExt;
+    assign(ProgFile, mousefile);
     {$I-}
-    reset(progfile);
+    reset(ProgFile);
     {$I+}
   end;
   openfile := IOResult = 0;
@@ -492,7 +494,7 @@ end;
 procedure processparameters;
 var
   paramnum  : Integer;
-  parameter : filename;
+  Parameter : FileName;
   stop      : boolean;
 begin
   paramnum  := 1;
@@ -500,12 +502,12 @@ begin
 
   { Process command line parameters. }
   repeat
-    parameter := paramstr(paramnum);
-    if parameter[1] = '-' then
+    Parameter := paramstr(paramnum);
+    if Parameter[1] = '-' then
       begin
-        case upcase(parameter[2]) of
+        case upcase(Parameter[2]) of
           '-': stop := true;
-          'T': tracing := true;
+          'T': Tracing := true;
         end;
         paramnum := succ(paramnum);
       end else
@@ -519,10 +521,10 @@ begin
   end;
 
   { Attempt to open the file. }
-  parameter := paramstr(paramnum);
-  if not openfile(parameter) then
+  Parameter := paramstr(paramnum);
+  if not openfile(Parameter) then
   begin
-    writeln('Unable to open the program: ', parameter);
+    writeln('Unable to open the program: ', Parameter);
     halt(1)
   end;
 end;
@@ -533,7 +535,7 @@ begin
   processparameters;
 
   load;
-  if not disaster then
+  if not Disaster then
   begin
     makedeftable;
     interpret;
