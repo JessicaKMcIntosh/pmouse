@@ -386,7 +386,7 @@ begin
           skip('[', ']');
       ']': ;                    { No action }
       '(': pushenv(loop);       { Begin loop }
-      ')': charpos := envstack[esp].charpos + 1; { End loop }
+      ')': charpos := envstack[esp].charpos; { End loop }
       '^': if pop <= 0 then     { Exit loop }
         begin
           popenv;
