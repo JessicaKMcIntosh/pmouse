@@ -501,9 +501,9 @@ begin
   { Process command line parameters. }
   repeat
     parameter := paramstr(paramnum);
-    if copy(parameter, 1, 1) = '-' then
+    if parameter[1] = '-' then
       begin
-        case upcase(copy(parameter, 2, 1)) of
+        case upcase(parameter[2]) of
           '-': stop := true;
           'T': tracing := true;
         end;
