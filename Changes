@@ -1,3 +1,7 @@
+2020-08-08:
+- Added command line parameter processing.
+- Added the command line parameter -T to enable tracing.
+
 2020-08-07:
 - Created the GutHub repository https://github.com/JessicaKMcIntosh/pmouse
 - Reformatted the original Pascal version using https://pak.lebah.web.id/jcf.cgi
