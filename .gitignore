@@ -5,3 +5,4 @@ units
 intermediate-files/
 mouse
 pmouse
+pmouse.o
