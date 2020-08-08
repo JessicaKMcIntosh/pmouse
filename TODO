@@ -1,0 +1,8 @@
+The Pascal version is not completely compatible with the C version.
+This results in some of the example files not working correctly.
+
+Work on compatability with older version of Turbo Pascal.
+This is mostly for my amusement.
+
+Add features from David G. Simpson's 2002 version of Mouse.
+http://mouse.davidgsimpson.com/mouse2002/index.html

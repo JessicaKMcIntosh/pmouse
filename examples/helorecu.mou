@@ -1,0 +1,5 @@
+~ Output 'Hello, World' ten times using recursive macro
+
+#p,10;
+$
+$p 1% [ "Hello, World!" #p,1% 1 - ; ] @

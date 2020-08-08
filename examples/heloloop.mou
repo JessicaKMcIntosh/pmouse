@@ -1,0 +1,4 @@
+~ Output 'Hello, World' ten times
+
+10 c: ( c. ^ "Looping Hello, World - Round " 11 c. -  ! "!" c. 1 - c: )
+$

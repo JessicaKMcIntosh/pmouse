@@ -1,0 +1,5 @@
+2020-08-07:
+- Created the GutHub repository https://github.com/JessicaKMcIntosh/pmouse
+- Reformatted the original Pascal version using https://pak.lebah.web.id/jcf.cgi
+- Require a file name on the command line.
+- Made some compatibility changes for older versions of Turbo Pascal.

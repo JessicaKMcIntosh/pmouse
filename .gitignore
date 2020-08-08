@@ -1,0 +1,7 @@
+*.swp
+Makefile
+fpcmade.*
+units
+intermediate-files/
+mouse
+pmouse

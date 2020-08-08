@@ -1,0 +1,40 @@
+PMouse is an interpreter for the language MOUSE created by Dr Peter Grogono in
+his book MOUSE: A Language for Microcomputers, Petrocelli Books, 1983.
+
+Most of the files are taking from David G. Simpson's website.
+http://mouse.davidgsimpson.com/
+
+Example Files:
+
+Most example files are taking from David G. Simpson's website, originally from
+the book MOUSE: A Language for Microcomputers.
+
+3n1.mou         - Multiply by 3 and 1, Mouse Book, pp. 37-38
+91.mou          - "91" function, Mouse Book, pp. 37-38
+bubblea.mou     - Bubble sort with array, Mouse Book, pp. 37-38
+bubblep.mou     - Bubble sort with pointers, Mouse Book, pp. 37-38
+easter.mou      - Date of Easter, David G. Simpson
+expr.mou        - Expression evaluator, Mouse Book, pp. 37-38
+hanoi.mou       - Towers of Hanoi, Mouse Book, pp. 37-38
+heloloop.mou    - Hello world repeated 10 times via loop.
+helorecu.mou    - Hello world repeated 10 times via recursion.
+mcdonald.mou    - MacDonald's Farm, Mouse Book, pp. 37-38
+prime.mou       - Prime factors of a number, Mouse Book, pp. 37-38
+quicksrt.mou    - Quicksort, Mouse Book, pp. 37-38
+test.mou        - General test program, Mouse Book, pp. 37-38
+
+
+References:
+
+Mouse Wikipedia page:
+https://en.wikipedia.org/wiki/Mouse_%28programming_language%29
+
+Dr Peter Grogono:
+General: http://users.encs.concordia.ca/~grogono/
+Moue Specific: http://users.encs.concordia.ca/~grogono/Mouse/mouse.html
+MOUSE: A Language for Microcomputers:
+https://www.amazon.com/dp/0894332015/ref=cm_sw_em_r_mt_dp_ysHlFbQC7S3BX
+
+David G. Simpson
+General: http://www.davidgsimpson.com/
+Moue Specific: http://mouse.davidgsimpson.com/
