@@ -488,18 +488,49 @@ begin
   openfile := IOResult = 0;
 end;
 
-{ Main program }
+{ Process command line parameters. }
+procedure processparameters;
+var
+  paramnum  : Integer;
+  parameter : filename;
+  stop      : boolean;
 begin
-  { Open the file passed on the command line. }
-  if paramcount = 0 then begin
+  paramnum  := 1;
+  stop      := false;
+
+  { Process command line parameters. }
+  repeat
+    parameter := paramstr(paramnum);
+    if copy(parameter, 1, 1) = '-' then
+      begin
+        case upcase(copy(parameter, 2, 1)) of
+          '-': stop := true;
+          'T': tracing := true;
+        end;
+        paramnum := succ(paramnum);
+      end else
+        stop := true;
+  until (stop or (paramnum <= paramcount));
+
+  { Check if there are more parameters for a file. }
+  if paramnum > paramcount then begin
     writeln('The file name must be provided.');
     halt(1);
   end;
-  if not openfile(paramstr(1)) then
+
+  { Attempt to open the file. }
+  parameter := paramstr(paramnum);
+  if not openfile(parameter) then
   begin
-    writeln('Unable to open the program: ', paramstr(1));
+    writeln('Unable to open the program: ', parameter);
     halt(1)
   end;
+end;
+
+{ Main program }
+begin
+  { Process the command line parameters. }
+  processparameters;
 
   load;
   if not disaster then
