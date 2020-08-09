@@ -1,3 +1,5 @@
+~ MOUSE: A Language for Microcomputers, pp. 37-38
+
 ? N:                  ~ Read a number
 1 P:
 ( P. 1 + P:           ~ find its smallest prime factor

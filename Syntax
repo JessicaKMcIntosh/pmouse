@@ -1,0 +1,60 @@
+Syntax reference for the mouse language.
+
+Stack references used in the descriptions below:
+X refers to the top number of the stack.
+Y refers to the second number on the stack.
+
+Boolean Values:
+0 is a False.
+Any other value is TRUE.
+
+Miscellaneous:
+<space>     Spaces have no action except inside a string.
+{           Enable execution tracing.
+}           Disable execution tracing.
+~           Comment. Everything to the end of the line is ignored.
+$           Marks the end of the program. (See also Macros below.)
+
+Variables:
+A-Z         Variables. Each returns the address to the variable location.
+:           Store a value into a variable address. Ex. 42 A:
+.           Retrieve a value from a variable address. Ex. A.
+
+Math:
+0-9         Integer literals.
++           Adds two numbers and leaves the sum.                Y + x
+-           Subtracts two numbers and leaves the difference.    Y - X
+*           Multiples two numbers and leaves the product.       Y * X
+/           Divides two numbers and leaves the quotient.        Y / X
+\           Divides two numbers and leaves  the remainder.      Y % X
+
+Input and Output:
+?           Read a number. The value is placed on the stack.
+?'          Read a character. The ASCII value is placed on the stack
+!           Output a number from the stack.
+!'          Output an ASCII character from the stack.
+"Text"      Output a string.
+'<Char>     Put the ASCII code for the character on th stack.
+
+Conditional:
+<           Returns True if Y < X, otherwise returns False.
+=           Returns True if Y = X, otherwise returns False.
+>           Returns True if Y > X, otherwise returns False.
+[]          Conditional execution. If X is true the contents are executed.
+
+Loops:
+()          The contents are executed repeatedly.
+^           If X is False exits a loop.
+
+Macros:
+$           Defines a Macro. Macros are a single letter, A-Z, case insensitive.
+#           Calls a Macro.
+@           Exit from a Macro.
+%           Inside a Macro refers to numbered parameters.
+,           Separates parameters in a macro call.
+;           End of a Macro call.
+
+These symbols are currently unused:
+_
+`
+|

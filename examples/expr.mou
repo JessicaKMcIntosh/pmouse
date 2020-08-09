@@ -1,4 +1,6 @@
 ~ Expression evaluation
+~ MOUSE: A Language for Microcomputers, pp. 37-38
+
 ( "!: " #G,c; 1 c. '. = - ^
    #E,c; ! )
 $E #T,1%;                      ~ Evaluate an expression

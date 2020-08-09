@@ -1,7 +1,7 @@
 PMouse is an interpreter for the language MOUSE created by Dr Peter Grogono in
 his book MOUSE: A Language for Microcomputers, Petrocelli Books, 1983.
 
-Most of the files are taking from David G. Simpson's website.
+Most of the files are taking from David G. Simpson's website on Mouse.
 http://mouse.davidgsimpson.com/
 
 Example Files:
@@ -16,25 +16,33 @@ bubblep.mou     - Bubble sort with pointers, Mouse Book, pp. 37-38
 easter.mou      - Date of Easter, David G. Simpson
 expr.mou        - Expression evaluator, Mouse Book, pp. 37-38
 hanoi.mou       - Towers of Hanoi, Mouse Book, pp. 37-38
+hello.mou       - Simple Hello World program.
 heloloop.mou    - Hello world repeated 10 times via loop.
 helorecu.mou    - Hello world repeated 10 times via recursion.
 mcdonald.mou    - MacDonald's Farm, Mouse Book, pp. 37-38
 prime.mou       - Prime factors of a number, Mouse Book, pp. 37-38
-quicksrt.mou    - Quicksort, Mouse Book, pp. 37-38
+quicksrt.mou    - Quicksort using pointers, Mouse Book, pp. 37-38
 test.mou        - General test program, Mouse Book, pp. 37-38
 
 
 References:
 
-Mouse Wikipedia page:
+Mouse Wikipedia page
 https://en.wikipedia.org/wiki/Mouse_%28programming_language%29
 
-Dr Peter Grogono:
+Dr Peter Grogono
+Created the Mouse language.
 General: http://users.encs.concordia.ca/~grogono/
 Moue Specific: http://users.encs.concordia.ca/~grogono/Mouse/mouse.html
 MOUSE: A Language for Microcomputers:
 https://www.amazon.com/dp/0894332015/ref=cm_sw_em_r_mt_dp_ysHlFbQC7S3BX
 
 David G. Simpson
+Lots of information on Mouse including an extended version in C.
 General: http://www.davidgsimpson.com/
 Moue Specific: http://mouse.davidgsimpson.com/
+
+Lawrence Woodman - TechTinkering article on Mouse.
+Discusses Mouse on CP/M.
+Includes an interesting video.
+https://techtinkering.com/articles/the-mouse-programming-language-on-cpm/

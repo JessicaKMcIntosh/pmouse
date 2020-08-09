@@ -1,4 +1,6 @@
 ~ Multiply by 3 and add 1
+~ MOUSE: A Language for Microcomputers, pp. 37-38
+
 ( "!Enter a number (0 terminates) : "
   ? N: N. 0 > ^                             ~ Read number and check > 0
   0 C:                                      ~ Initialize counter

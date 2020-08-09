@@ -1,4 +1,5 @@
 ~ MacDonald's Farm
+~ MOUSE: A Language for Microcomputers, pp. 37-38
 
 ( "!!How many verses? " ? N: N. 0> ^ #S,1,N.;)
 

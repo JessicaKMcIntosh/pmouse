@@ -1,4 +1,5 @@
-~ Output 'Hello, World' ten times
+~ Output 'Hello, World' ten times using a loop.
+~ Lawrence Woodman - TechTinkering article on Mouse.
 
 10 c: ( c. ^ "Looping Hello, World - Round " 11 c. -  ! "!" c. 1 - c: )
 $

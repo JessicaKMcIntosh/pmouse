@@ -1,4 +1,6 @@
 ~ Quicksort using pointers
+~ MOUSE: A Language for Microcomputers, pp. 37-38
+
 #S,a;                          ~ Numbers to be sorted are stored
                                ~ in the array "a"
 $S "Enter numbers to be sorted (0 terminates):!"

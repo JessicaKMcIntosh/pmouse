@@ -1,4 +1,6 @@
 ~ General test program for Mouse interpreters
+~ MOUSE: A Language for Microcomputers, pp. 37-38
+
 "!Arithmetic Expressions: "
    777 223 + !   "="  3579 2579 - ! "="
    25 40 * !     "="  7000 7 / !    "="

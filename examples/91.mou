@@ -1,4 +1,6 @@
 ~ 91 function - returns 91 for any argument < 101
+~ MOUSE: A Language for Microcomputers, pp. 37-38
+
 "Enter a number: " ? N:
 #G,N.; !
 

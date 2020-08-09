@@ -1,4 +1,6 @@
 ~ Bubble sort: demonstrates array indexing
+~ MOUSE: A Language for Microcomputers, pp. 37-38
+
 "!Enter numbers to be sorted (0 terminates): "
 
 0 1 - Z:                            ~ Set number counter

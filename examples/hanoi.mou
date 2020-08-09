@@ -1,4 +1,6 @@
 ~ Tower of Hanoi
+~ MOUSE: A Language for Microcomputers, pp. 37-38
+
 ( "!How many disks? " ? d: d. 0 > ^
    #H,d., "left","right","middle"; )
 $H 1% d:

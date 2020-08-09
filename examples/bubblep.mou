@@ -1,4 +1,6 @@
 ~ Bubble sort: demonstration of pointers
+~ MOUSE: A Language for Microcomputers, pp. 37-38
+
 "!Enter numbers to be sorted (0 terminates): "
 A 1 -Z:                           ~ Set pointer Z
 (? X: X. 0> ^                     ~ Read number and check > 0

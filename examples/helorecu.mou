@@ -1,4 +1,5 @@
-~ Output 'Hello, World' ten times using recursive macro
+~ Output 'Hello, World' ten times using recursive macro.
+~ Lawrence Woodman - TechTinkering article on Mouse.
 
 #p,10;
 $

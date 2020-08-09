@@ -1,3 +1,8 @@
+2020-02-09:
+- Added sources to the example files.
+- Expanded README file.
+- Created the Syntax file.
+
 2020-08-08:
 - Added command line parameter processing.
 - Added the command line parameter -T to enable tracing.
