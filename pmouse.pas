@@ -233,22 +233,57 @@ end;   { popenv }
 
 { The Loader. }
 procedure load;
+var
+  Prev      : char;
+  InString  : boolean;
 begin
-  for CharPos := 1 to MaxProgLen do
-    Prog[CharPos] := ' ';
-  CharPos := 0;
+  { Fill the program memory with blanks. }
+  fillchar(Prog, MaxProgLen, ' ');
+
+  { Initialize the variables.}
+  CH := '~';
+  InString := false;
   Disaster := false;
+  CharPos := 0;
+
+  { Read the program file. }
   while not (EOF(ProgFile) or Disaster) do
   begin
+    Prev := CH;
     read(ProgFile, CH);
-    if CH < ' ' then
-      CH := ' ';
     if CH = '~' then
       readln(ProgFile)
     else if CharPos < MaxProgLen then
     begin
       CharPos := CharPos + 1;
+      { Keep track of when inside a string for optimizations. }
+      if CH = '"' then
+        InString := not InString;
+      { Change any control characters to space. }
+      if CH < ' ' then
+        CH := ' ';
+      { Save the cahracter to the program. }
       Prog[CharPos] := CH;
+
+      { Perform some optimization to remove extra blanks. }
+      if not InString then
+      begin
+        if (CH = ' ') and not (Prev in ['0'..'9']) and (Prev <> '''')  then
+          begin
+            CharPos := pred(CharPos);
+            CH := Prog[CharPos];
+          end
+        else
+        if  (prev = ' ') and
+            not (CH in ['0'..'9']) and
+            (CH <> '"') and
+            (Prog[CharPos - 2] <> '''')
+          then
+          begin
+            CharPos := pred(CharPos);
+            Prog[CharPos] := CH;
+          end;
+      end;
     end
     else
     begin
@@ -256,7 +291,7 @@ begin
       Disaster := true;
     end;
   end;   { while not (EOF(ProgFile) or Disaster) }
-  ProgLen := CharPos;
+  ProgLen := CharPos + 1;
 end;   { load }
 
 { Construct macro definition table. }
@@ -427,8 +462,8 @@ begin
         pushenv(Parameter);
         ParmBal := 1;
         TStackPointer := EStackPointer;
-        repeat
-          TStackPointer := TStackPointer - 1; { Search in stack... }
+        repeat                  { Search in stack... }
+          TStackPointer := TStackPointer - 1;
 
           case EnvStack[TStackPointer].Tag of
             Macro: ParmBal := ParmBal - 1;
@@ -449,7 +484,7 @@ begin
           else if CH = ';' then
           begin
             ParmNum := 0;
-            popenv;   { Null parameter }
+            popenv;             { Null parameter }
           end
         until ParmNum = 0;
       end;
@@ -531,10 +566,16 @@ end;
 
 { Main program }
 begin
+  { Default to tracing off. }
+  Tracing := False;
+
   { Process the command line parameters. }
   processparameters;
 
+  { Load the program file. }
   load;
+
+  { If the program file loaded successfully then start interpreting. }
   if not Disaster then
   begin
     makedeftable;
