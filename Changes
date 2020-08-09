@@ -1,6 +1,9 @@
 2020-08-08:
 - Added command line parameter processing.
 - Added the command line parameter -T to enable tracing.
+- Reformatted veriales names.
+- Moved some global variables into interpret.
+- Ported optimization to remove extra spaces from the C version.
 
 2020-08-07:
 - Created the GutHub repository https://github.com/JessicaKMcIntosh/pmouse
