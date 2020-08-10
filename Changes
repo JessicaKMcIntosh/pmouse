@@ -2,6 +2,9 @@
 - Added sources to the example files.
 - Expanded README file.
 - Created the Syntax file.
+- Changed how ?' works to match the C version.
+- Added stack information to the trace output.
+  Shows the current stack Pointer and the first 5 items on the stack.
 
 2020-08-08:
 - Added command line parameter processing.

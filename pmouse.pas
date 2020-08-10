@@ -90,7 +90,22 @@ begin
     else
       write(' ');
   writeln;
-  writeln(' ': HalfWidth, '^');
+  write(' ': HalfWidth, '^ SP: ', StackPointer, ' Stack: ');
+  if StackPointer = 0 then
+    write('NULL')
+  else
+  begin
+    write(Stack[StackPointer]);
+    if StackPointer > 1 then
+    begin
+      pos := 1;
+      repeat
+        write(', ', Stack[StackPointer - pos]);
+        pos := succ(pos);
+      until ((StackPointer - pos) < 1) or (pos = 5);
+    end;
+  end;
+  writeln;
 end;   { display }
 
 { Report an error and set 'Disaster' flag to stop the interpreter. }
@@ -373,6 +388,13 @@ begin
         if CH = '''' then
         begin
           read(CH);
+          { This is a hack to make pmouse act like the C version.
+            For whatever reason when the C version reaches a newline
+            the newline is replaced with a single quote, ASCII 39.
+            With this change the expr.mou example will work now.
+          }
+          if (CH = #13) or (CH = #10) then
+            CH := '''';
           push(Ord(CH));
         end
         else
@@ -540,9 +562,9 @@ begin
     Parameter := paramstr(paramnum);
     if Parameter[1] = '-' then
       begin
-        case upcase(Parameter[2]) of
+        case Parameter[2] of
           '-': stop := true;
-          'T': Tracing := true;
+          't': Tracing := true;
         end;
         paramnum := succ(paramnum);
       end else
