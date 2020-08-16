@@ -41,6 +41,7 @@ Conditional:
 =           Returns True if Y = X, otherwise returns False.
 >           Returns True if Y > X, otherwise returns False.
 []          Conditional execution. If X is true the contents are executed.
+|           Else clause of a condition. [ TRUE | FALSE ]
 
 Loops:
 ()          The contents are executed repeatedly.
@@ -57,4 +58,3 @@ $           Defines a Macro. Macros are a single letter, A-Z, case insensitive.
 These symbols are currently unused:
 _
 `
-|

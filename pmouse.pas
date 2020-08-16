@@ -206,6 +206,22 @@ begin
   until Count = 0;
 end;   { skip }
 
+{ Skip bracketed sequences; lch has been scanned on entry. }
+procedure skip2(lch, rch1, rch2: char);
+var
+  Count: byte;
+begin
+  Count := 1;
+  repeat
+    getchar;
+    if CH = '"' then
+      skipstring
+    else if CH = lch then
+      Count := Count + 1
+    else if (CH = rch1) or (CH = rch2) then
+      Count := Count - 1
+  until Count = 0;
+end;   { skip }
 { Return the binary value of an ASCII digit. }
 function Value(digit: char): byte;
 begin
@@ -442,8 +458,9 @@ begin
         push(Ord(pop > TempInt));
       end;
       '[': if pop <= 0 then     { Conditional statement }
-          skip('[', ']');
+          skip2('[', '|', ']');
       ']': ;                    { No action }
+      '|': skip('[', ']');      { Else }
       '(': pushenv(Loop);       { Begin loop }
       ')': CharPos := EnvStack[EStackPointer].CharPos; { End loop }
       '^': if pop <= 0 then     { Exit loop }
@@ -521,7 +538,6 @@ begin
       '}': Tracing := false;
       '`',                      { Unused characters }
       '&',
-      '|',
       '_': error(11);
       else error(11)
     end;   { CASE }
