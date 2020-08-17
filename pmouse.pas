@@ -78,6 +78,20 @@ var
   Tracing,                          { If true tracing is enabled. }
   Disaster      : boolean;          { If true a critical error has occurred. }
 
+{ Utilities for detecting a character type. }
+function isdigit(check: char): boolean;
+begin
+  isdigit := check in ['0'..'9'];
+end;
+function islower(check: char): boolean;
+begin
+  islower := check in ['a'..'z'];
+end;
+function isupper(check: char): boolean;
+begin
+  isupper := check in ['A'..'Z'];
+end;
+
 { Display an environment; used for reporting errors and tracing. }
 procedure display(CharPos: ProxIndex);
 var
@@ -231,7 +245,7 @@ end;   { value }
 { Convert a lower case letter to upper case. }
 procedure uppercase;
 begin
-  if CH in ['a'..'z'] then
+  if islower(CH) then
     CH := chr(Ord(CH) - Ord('a') + Ord('A'));
 end;   { uppercase }
 
@@ -299,14 +313,14 @@ begin
       { Perform some optimization to remove extra blanks. }
       if not InString then
       begin
-        if (CH = ' ') and not (Prev in ['0'..'9']) and (Prev <> '''')  then
+        if (CH = ' ') and not isdigit(Prev) and (Prev <> '''')  then
           begin
             CharPos := pred(CharPos);
             CH := Prog[CharPos];
           end
         else
         if  (prev = ' ') and
-            not (CH in ['0'..'9']) and
+            not isdigit(CH) and
             (CH <> '"') and
             (Prog[CharPos - 2] <> '''')
           then
@@ -337,7 +351,7 @@ begin
     begin
       getchar;
       uppercase;
-      if CH in ['A'..'Z'] then
+      if isupper(CH) then
         MacroDefs[CH] := CharPos;
     end
   until CharPos = ProgLen;
@@ -367,11 +381,11 @@ begin
       '0'..'9':                 { Encode a decimal number }
       begin
         TempInt := 0;
-        while CH in ['0'..'9'] do
+        while isdigit(CH) do
         begin
           TempInt := 10 * TempInt + Value(CH);
           getchar;
-        end;   { while CH in ['0'..'9'] }
+        end;   { while isdigit(CH) }
         push(TempInt);
         backspace;
       end;
@@ -472,7 +486,7 @@ begin
       begin
         getchar;
         uppercase;
-        if CH in ['A'..'Z'] then
+        if isupper(CH) then
           if MacroDefs[CH] > 0 then
           begin
             pushenv(Macro);

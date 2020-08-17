@@ -1,5 +1,6 @@
 2020-08-16:
 - Added | as else clause for conditions.
+- Replaced scattered character in checks with dedicated functions.
 
 2020-02-09:
 - Added sources to the example files.
