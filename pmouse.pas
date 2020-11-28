@@ -76,6 +76,7 @@ var
   TStackPointer : 0 .. EnvStackSize;{ Temporary stack Pointer. }
   Offset        : integer;          { Memory offset for environments. }
   Tracing,                          { If true tracing is enabled. }
+  DumpProg,                         { If true dump the program after reading. }
   Disaster      : boolean;          { If true a critical error has occurred. }
 
 { Utilities for detecting a character type. }
@@ -313,7 +314,7 @@ begin
       { Perform some optimization to remove extra blanks. }
       if not InString then
       begin
-        if (CH = ' ') and not isdigit(Prev) and (Prev <> '''')  then
+        if (CH = ' ') and not isdigit(Prev) and (Prev <> '''') and (Prev <> '$')  then
           begin
             CharPos := pred(CharPos);
             CH := Prog[CharPos];
@@ -322,7 +323,8 @@ begin
         if  (prev = ' ') and
             not isdigit(CH) and
             (CH <> '"') and
-            (Prog[CharPos - 2] <> '''')
+            (Prog[CharPos - 2] <> '''') and
+            (Prog[CharPos - 2] <> '$')
           then
           begin
             CharPos := pred(CharPos);
@@ -337,6 +339,14 @@ begin
     end;
   end;   { while not (EOF(ProgFile) or Disaster) }
   ProgLen := CharPos + 1;
+  if DumpProg then
+    begin
+      writeln('Program after loading:');
+      for CharPos := 0 to ProgLen do
+        write(Prog[CharPos]);
+      writeln('');
+      writeln('');
+    end;
 end;   { load }
 
 { Construct macro definition table. }
@@ -452,7 +462,7 @@ begin
           else if CH <> '"' then
             write(CH)
         until CH = '"';
-      'A'..'Z': push(Ord(CH) - Ord('A') + Offset);
+      'A'..'Z': push(Ord(CH) - Ord('A'));
       'a'..'z': push(Ord(CH) - Ord('a') + Offset);
       ':':                      { Assignment }
       begin
@@ -594,6 +604,7 @@ begin
       begin
         case Parameter[2] of
           '-': stop := true;
+          'd': DumpProg := true;
           't': Tracing := true;
         end;
         paramnum := succ(paramnum);

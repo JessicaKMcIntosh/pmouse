@@ -1,3 +1,11 @@
+2020-11-23:
+- Added support for Global variables.
+  Uppercase are always Global, lowercase are always local.
+- Fixed an error loading a file with a $ terminating the program but not
+  starting a macro. See the example helorecu.mou
+- Added the command line parameter -d to dump the program after loading.
+  This is to help diagnose issues like the previous fix.
+
 2020-08-16:
 - Added | as else clause for conditions.
 - Replaced scattered character in checks with dedicated functions.
