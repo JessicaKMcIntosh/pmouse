@@ -610,7 +610,7 @@ begin
         paramnum := succ(paramnum);
       end else
         stop := true;
-  until (stop or (paramnum <= paramcount));
+  until (stop or (paramnum >= paramcount));
 
   { Check if there are more parameters for a file. }
   if paramnum > paramcount then begin
@@ -629,8 +629,9 @@ end;
 
 { Main program }
 begin
-  { Default to tracing off. }
-  Tracing := False;
+  { Defaults: }
+  Tracing := False;  { Tracing off. }
+  DumpProg := False; { Do not dump the program after loading. }
 
   { Process the command line parameters. }
   processparameters;
