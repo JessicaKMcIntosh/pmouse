@@ -58,3 +58,4 @@ $           Defines a Macro. Macros are a single letter, A-Z, case insensitive.
 These symbols are currently unused:
 _
 `
+&
