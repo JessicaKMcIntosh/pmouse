@@ -36,6 +36,8 @@
 ******************************************************************************)
 program PMOUSE;
 
+uses CharUtils;
+
 const
   MaxProgLen    = 2000;     { Maximum length of Mouse program }
   StackSize     = 1024;     { Maximum depth of calculation stack }
@@ -78,20 +80,6 @@ var
   Tracing,                          { If true tracing is enabled. }
   DumpProg,                         { If true dump the program after reading. }
   Disaster      : boolean;          { If true a critical error has occurred. }
-
-{ Utilities for detecting a character type. }
-function isdigit(check: char): boolean;
-begin
-  isdigit := check in ['0'..'9'];
-end;
-function islower(check: char): boolean;
-begin
-  islower := check in ['a'..'z'];
-end;
-function isupper(check: char): boolean;
-begin
-  isupper := check in ['A'..'Z'];
-end;
 
 { Display an environment; used for reporting errors and tracing. }
 procedure display(CharPos: ProxIndex);
@@ -237,18 +225,6 @@ begin
       Count := Count - 1
   until Count = 0;
 end;   { skip }
-{ Return the binary value of an ASCII digit. }
-function Value(digit: char): byte;
-begin
-  Value := Ord(digit) - Ord('0');
-end;   { value }
-
-{ Convert a lower case letter to upper case. }
-procedure uppercase;
-begin
-  if islower(CH) then
-    CH := chr(Ord(CH) - Ord('a') + Ord('A'));
-end;   { uppercase }
 
 { Push an environment; check for environment stack overflow. }
 procedure pushenv(Tag: TagType);
@@ -360,7 +336,7 @@ begin
     if CH = '$' then
     begin
       getchar;
-      uppercase;
+      CH := uppercase(CH);
       if isupper(CH) then
         MacroDefs[CH] := CharPos;
     end
@@ -495,7 +471,7 @@ begin
       '#':                      { Macro call }
       begin
         getchar;
-        uppercase;
+        CH := uppercase(CH);
         if isupper(CH) then
           if MacroDefs[CH] > 0 then
           begin
