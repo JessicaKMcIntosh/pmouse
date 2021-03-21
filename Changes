@@ -1,3 +1,8 @@
+2021-03-20:
+- Moved some character utilities into a separate unit.
+- Starting to plan adding tests using fptest.
+  https://wiki.freepascal.org/FPTest
+
 2020-11-23:
 - Added support for Global variables.
   Uppercase are always Global, lowercase are always local.
