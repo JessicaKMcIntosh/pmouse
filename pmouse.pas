@@ -36,7 +36,7 @@
 ******************************************************************************)
 program PMOUSE;
 
-uses CharUtils;
+uses CharUtil;
 
 const
   MaxProgLen    = 2000;     { Maximum length of Mouse program }

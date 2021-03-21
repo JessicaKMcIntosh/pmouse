@@ -4,8 +4,8 @@
 /*                                                                           */
 /*  Program:      PMOUSE - Pascal Mouse                                      */
 /*                                                                           */
-/*  Unit:         CharUtils                                                  */
-/*                Utilities for detecting a character type.                  */
+/*  Unit:         CharUtil                                                   */
+/*                Utilities for working with characters.                     */
 /*                                                                           */
 /*  Originally by:                                                           */
 /*  Programmer:   Dr Peter Grogono                                           */
@@ -37,7 +37,7 @@
 /*                assumed.                                                   */
 /*                                                                           */
 ******************************************************************************)
-unit CharUtils;
+unit CharUtil;
 
 interface
 
