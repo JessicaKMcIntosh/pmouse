@@ -37,14 +37,14 @@
 /*                assumed.                                                   */
 /*                                                                           */
 ******************************************************************************)
-unit CharUtil;
+unit charutil;
 
 interface
 
 function isdigit(check: char): boolean;
 function islower(check: char): boolean;
 function isupper(check: char): boolean;
-function Value(digit: char): byte;
+function charvalue(digit: char): byte;
 function uppercase(Character: char) :char;
 
 implementation
@@ -68,9 +68,9 @@ begin
 end;   { isupper }
 
 { Return the binary value of an ASCII digit. }
-function Value(digit: char): byte;
+function charvalue(digit: char): byte;
 begin
-  Value := Ord(digit) - Ord('0');
+  charvalue := Ord(digit) - Ord('0');
 end;  { value }
 
 { Convert a lower case letter to upper case. }

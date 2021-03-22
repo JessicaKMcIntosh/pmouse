@@ -1,3 +1,7 @@
+2021-03-21:
+- Added the first test using fpcunit.
+- Moved all pascal source to the src directory.
+
 2021-03-20:
 - Moved some character utilities into a separate unit.
 - Starting to plan adding tests using fptest.

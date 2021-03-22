@@ -1,3 +1,6 @@
 [target]
-units=charutil
-programs=pmouse
+units=charutil testutil
+programs=pmouse runtests
+
+[compiler]
+sourcedir=src

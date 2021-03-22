@@ -369,7 +369,7 @@ begin
         TempInt := 0;
         while isdigit(CH) do
         begin
-          TempInt := 10 * TempInt + Value(CH);
+          TempInt := 10 * TempInt + charvalue(CH);
           getchar;
         end;   { while isdigit(CH) }
         push(TempInt);
