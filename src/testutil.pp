@@ -1,3 +1,19 @@
+(*****************************************************************************/
+/*                                                                           */
+/*                             M O U S E                                     */
+/*                                                                           */
+/*  Unit:         testutil - Tests the unit charutil.pas                     */
+/*                                                                           */
+/*  Programmer:   Jessica K McIntosh                                         */
+/*                https://github.com/JessicaKMcIntosh/pmouse                 */
+/*                                                                           */
+/*  Language:     Pascal                                                     */
+/*                                                                           */
+/*  Description:  Test runner for the various test Units.                    */
+/*                                                                           */
+/*  Notes:        Taken from the fpcunit example needassert.pp.              */
+/*                                                                           */
+******************************************************************************)
 unit testutil;
 
 {$mode objfpc}
