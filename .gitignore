@@ -7,3 +7,6 @@ mouse
 pmouse
 pmouse.o
 pmouse.exe
+runtests
+runtests.o
+runtests.exe
