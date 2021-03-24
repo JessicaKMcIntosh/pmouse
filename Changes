@@ -1,3 +1,6 @@
+2021-03-23:
+- Added more tests and a new example.
+
 2021-03-21:
 - Added the first test using fpcunit.
 - Moved all pascal source to the src directory.
