@@ -96,7 +96,7 @@ var
   testChar: char;
 begin
   for testChar := 'a' to 'z' do
-    AssertEquals('Testing uppercasing "' + testChar + '".', upcase(testChar), uppercase(testChar));
+    AssertEquals('Testing uppercasing "' + testChar + '".', uppercase(testChar), upcase(testChar));
 end;
 
 end.

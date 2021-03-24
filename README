@@ -11,6 +11,7 @@ the book MOUSE: A Language for Microcomputers.
 
 3n1.mou         - Multiply by 3 and 1, Mouse Book, pp. 37-38
 91.mou          - "91" function, Mouse Book, pp. 37-38
+bottles.mou     - Green Bottles by David G. Simpson
 bubblea.mou     - Bubble sort with array, Mouse Book, pp. 37-38
 bubblep.mou     - Bubble sort with pointers, Mouse Book, pp. 37-38
 easter.mou      - Date of Easter, David G. Simpson

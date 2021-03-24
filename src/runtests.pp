@@ -19,8 +19,8 @@ program runtests;
 {$mode objfpc}
 {$h+}
 
-uses fpcunit, testregistry, consoletestrunner, charutil,
-     testutil, testexamples, testtests;
+uses  fpcunit, testregistry, consoletestrunner, charutil,
+      testutil, testexamples, testtests;
 
 Var
   Application : TTestRunner;

@@ -21,7 +21,7 @@ unit testexamples;
 
 interface
 
-uses fpcunit, testregistry, consoletestrunner, Process, sysutils;
+uses fpcunit, testregistry, consoletestrunner, testtools, Process;
 
 type
   TTestExamples = class(TTestCase)
@@ -93,54 +93,6 @@ var
 begin
   RunCommand('pmouse',['examples' + DirectorySeparator + 'test.mou'],output);
   AssertEquals('Testing "test.mou".', test_mou_output, output);
-end;
-
-{ Execute a process that takes input and return the output. }
-function RunProcessWithInput(executable, parameter: string; input: array of string) : string;
-var
-  TestProcess: TProcess;
-  Buffer: array[0..1024] of char;
-  ReadCount: Integer;
-  ReadSize: Integer;
-  item: string;
-begin
-  { Setup the process. }
-  TestProcess            := TProcess.Create(nil);
-  TestProcess.Options    := [poUsePipes,poStderrToOutPut];
-  TestProcess.Executable := executable;
-  TestProcess.Parameters.Add(parameter);
-  TestProcess.Execute;
-
-  { Send the input to the program. }
-  for item in input do
-  begin
-    Buffer :=  item + LineEnding;
-    TestProcess.Input.Write(Buffer, length(Buffer));
-  end;
-  TestProcess.CloseInput;
-
-  { Wait for the process to finish. }
-  while TestProcess.Running do
-    Sleep(1);
-
-  { Read the output. }
-  ReadSize := TestProcess.Output.NumBytesAvailable;
-  if ReadSize > SizeOf(Buffer) then
-    ReadSize := SizeOf(Buffer);
-  if ReadSize > 0 then
-  begin
-    ReadCount := TestProcess.Output.Read(Buffer, ReadSize);
-    WriteLn(Copy(Buffer,0, ReadCount));
-  end
-  else
-    Buffer := '';
-
-  { Free the process. }
-  TestProcess.Free;
-
-  { Return the output. }
-  RunProcessWithInput := Buffer;
-
 end;
 
 {
