@@ -29,7 +29,9 @@ begin
   RegisterTest(TTestUtil);
   RegisterTest(TTestExamples);
   RegisterTest(TTestTests);
+{$IF FPC_FULLVERSION > 30100}
   TTestCase.CheckAssertCalled:=true;
+{$ENDIF}
   DefaultFormat:=fPlain;
   DefaultRunAllTests:=True;
   Application:=TTestRunner.Create(Nil);
