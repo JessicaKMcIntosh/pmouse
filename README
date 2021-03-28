@@ -4,6 +4,18 @@ his book MOUSE: A Language for Microcomputers, Petrocelli Books, 1983.
 Most of the files are taking from David G. Simpson's website on Mouse.
 http://mouse.davidgsimpson.com/
 
+Compiling:
+Run the following commands:
+* fpcmake
+* make
+
+WINDOWS WARNING For some reason fpcmake on Windows doesn't understand how to use
+source files in a subdirectory. I can't find a bug or any reference to this. The
+best advice I could find was to not use fpcmake. Frankly I'm done fighting
+FreePascal and it's lack of documentation and incessant bugs. If you want to
+compile on Windows you must CD into the src directory and compile from there.
+This project is likely dead because I'm just done with FreePascal.
+
 Example Files:
 
 Most example files are taking from David G. Simpson's website, originally from

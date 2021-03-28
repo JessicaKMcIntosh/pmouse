@@ -1,0 +1,6 @@
+[target]
+units=charutil testutil testexamples testtests testtools
+programs=pmouse runtests
+
+[compiler]
+targetdir=..
